@@ -1,8 +1,8 @@
-﻿using System;
+﻿using InnovajTempApi.Services.Interfaces;
+using System;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
-using InnovajTempApi.Services.Interfaces;
 
 namespace InnovajTempApi.Services
 {
@@ -30,6 +30,6 @@ namespace InnovajTempApi.Services
                 new StringContent(body, Encoding.UTF8, "application/json"));
         }
 
-       
+
     }
 }

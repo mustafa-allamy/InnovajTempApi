@@ -1,6 +1,6 @@
-﻿using System.Threading.Tasks;
-using InnovajTempApi.Dtos;
+﻿using InnovajTempApi.Dtos;
 using InnovajTempApi.ResponseHelpers;
+using System.Threading.Tasks;
 
 namespace InnovajTempApi.Services.Interfaces
 {

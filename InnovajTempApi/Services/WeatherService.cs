@@ -1,13 +1,13 @@
-﻿using System.Threading.Tasks;
-using InnovajTempApi.Dtos;
+﻿using InnovajTempApi.Dtos;
 using InnovajTempApi.ResponseHelpers;
 using InnovajTempApi.Services.Interfaces;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
+using System.Threading.Tasks;
 
 namespace InnovajTempApi.Services
 {
-    public class WeatherService:IWeatherService
+    public class WeatherService : IWeatherService
     {
         private readonly IHttpClientHelper _clientHelper;
         private readonly string _baseUrl;
@@ -24,38 +24,50 @@ namespace InnovajTempApi.Services
         {
             var response = await _clientHelper.Get($"data/2.5/weather?q={cityName}&appid={_appId}", _baseUrl);
             if (!response.IsSuccessStatusCode)
+            {
                 return new ServiceResponse<Coordination>(null)
                 {
                     Error = new ResponseError("Request failed")
-                }; 
-            var res= JsonConvert.DeserializeObject<WatherApiResult>(await response.Content.ReadAsStringAsync());
+                };
+            }
+
+            var res = JsonConvert.DeserializeObject<WatherApiResult>(await response.Content.ReadAsStringAsync());
             if (res == null)
+            {
                 return new ServiceResponse<Coordination>(null)
                 {
                     Error = new ResponseError("Could not translate response")
                 };
+            }
+
             return new ServiceResponse<Coordination>(res.coord);
         }
         public async Task<ServiceResponse<WeatherDetails>> GetCityWeatherDetails(string cityName)
         {
             var response = await _clientHelper.Get($"data/2.5/weather?q={cityName}&appid={_appId}", _baseUrl);
             if (!response.IsSuccessStatusCode)
+            {
                 return new ServiceResponse<WeatherDetails>(null)
                 {
                     Error = new ResponseError("Request failed")
                 };
+            }
+
             var res = JsonConvert.DeserializeObject<WatherApiResult>(await response.Content.ReadAsStringAsync());
             if (res == null)
+            {
                 return new ServiceResponse<WeatherDetails>(null)
                 {
                     Error = new ResponseError("Could not translate response")
                 };
+            }
+
             var details = new WeatherDetails()
             {
                 CityName = res.name,
-                FeelsLike = res.main.feels_like-273.15,
+                FeelsLike = res.main.feels_like - 273.15,
                 Humidity = res.main.humidity,
-                Temperature = res.main.temp-273.15,
+                Temperature = res.main.temp - 273.15,
                 WindSpeed = res.wind.speed,
             };
             return new ServiceResponse<WeatherDetails>(details);
